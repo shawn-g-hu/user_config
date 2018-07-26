@@ -148,9 +148,6 @@ if ! shopt -oq posix; then
   fi
 fi
 
-#export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
-
 
 # use vim to read man pages
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
@@ -172,6 +169,12 @@ export CUDA_HOME=/usr/local/cuda
 
 
 #work, specifically crossover machine
+
+#machine specific
+
+
+#export WORKON_HOME=$HOME/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
 
 alias aws='ssh -X -i ~/.ssh/shawnplusai.pem ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias awsfwd='ssh -X -i ~/.ssh/shawnplusai.pem -L 16006:127.0.0.1:6006 ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
