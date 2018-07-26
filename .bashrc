@@ -174,7 +174,7 @@ export CUDA_HOME=/usr/local/cuda
 
 
 #export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
+#source /usr/local/bin/virtualenvwrapper.sh
 
 alias aws='ssh -X -i ~/.ssh/shawnplusai.pem ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias awsfwd='ssh -X -i ~/.ssh/shawnplusai.pem -L 16006:127.0.0.1:6006 ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
