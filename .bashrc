@@ -21,7 +21,8 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 
 #vi mode for terminal
-set -o vi
+#set -o vi
+set -o emacs
 
 #avoid ctrl-s causing terminal xoff signal
 stty -ixon
@@ -133,8 +134,11 @@ alias l='ls -CF'
 
 #function cd() { builtin cd "$@" && ls; }
 function cl() { builtin cd "$@" && ls; }
+function ccd() { builtin cd "$@" && ls; }
+function d() { builtin cd "$@" && ls; }
 #function cla() { builtin cd "$@" && ls -la; }
 function sl() { ls; }
+function lsc() { ls; }
 
 
 # enable programmable completion features (you don't need to enable
@@ -179,6 +183,7 @@ export CUDA_HOME=/usr/local/cuda
 alias aws='ssh -X -i ~/.ssh/shawnplusai.pem ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias awsfwd='ssh -X -i ~/.ssh/shawnplusai.pem -L 16006:127.0.0.1:6006 ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias scrapebag='python ~/scripts/scrape_ros_bags.py'
+alias rostime='rosparam set use_sim_time true'
 
 export PATH=/usr/local/cuda/bin:$PATH
 source /opt/ros/kinetic/setup.bash
@@ -190,9 +195,10 @@ export EXTERNAL_LIB_DIR=$HOME/external/opt
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/nvidia-390
 export DRIVE_ROOT=/work/home/shawnghu/drive
-rosparam set use_sim_time true
 
 #lidar perception task
-alias cdlog='cd ~/drive/opt/debug/log/plusai'
+alias cddlog='cd ~/drive/opt/debug/log/plusai'
+alias cdrlog='cd ~/drive/opt/relwithdebinfo/log/plusai'
+
 alias cdrun='cd ~/drive/perception/runtime/src'
 
