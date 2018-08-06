@@ -23,7 +23,10 @@
 "call vundle#end()            " required
 "filetype plugin indent on    " required
 
-"bash-like autocompletion behavior 
+"search in ancestor directories for tag files
+set tags=./tags;,tags;
+
+"bash-like autocompletion behavior in command mode
 set wildmode=longest,list,full
 set wildmenu
 
@@ -103,6 +106,7 @@ set bg=dark
 set smarttab smartindent autoindent
 set shiftwidth=2
 set fileformat=unix
+set cursorline
 
 set encoding=utf-8
 
@@ -123,8 +127,8 @@ set incsearch
 set ignorecase
 "unless you search or something with caps
 set smartcase
-"don't highlight search results
-set nohlsearch
+"highlight search results
+set hlsearch
 
 set history=100
 set undolevels=100
