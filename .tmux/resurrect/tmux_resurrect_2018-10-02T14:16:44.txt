@@ -1,0 +1,37 @@
+pane	27	1	:bash	1	:*	1	:/work/home/shawnghu	1	bash	:
+pane	map	1	:vim	0	:	1	:/work/home/shawnghu/drive	1	vim	:vim ui/xview/src/xview.cpp
+vim perception/sensor/include/common/lidar_calib.h
+vim runtime/include/runtime/perception_config.h
+vim -S /home/shawnghu/.vim/sessions/map.vim
+vim filter.h
+pane	map	2	:log	0	:	1	:/work/home/shawnghu/drive/opt/relwithdebinfo/log/plusai	1	bash	:vim ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120059.7978 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120103.8547 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120108.8889 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120112.9301 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120149.11216 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120153.11700 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120158.12185 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120202.12464 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-120206.12753 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-121725.26419 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-121728.26856 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-122316.31742 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-122319.31995 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-122322.32080 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-122727.5572 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-122731.5931 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-122734.6031 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-125846.22103 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-125849.22335 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-125852.22489 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-125855.22550 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130222.26558 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130225.26865 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130229.27100 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130232.27161 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130604.1312 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130607.1573 ros_fusion_object_tracker.crossover.shawnghu.log.INFO.20181002-130610.1683 ros_fusion_object_tracker.INFO
+pane	map	3	:test	0	:-	1	:/work/home/shawnghu/drive/build/debug/test/drive_perception_obstacle_detection	1	bash	:
+pane	map	4	:bash	0	:	1	:/work/home/shawnghu/drive/perception/obstacle_detection/test	1	bash	:
+pane	map	5	:make	1	:*	1	:/work/home/shawnghu/drive	1	bash	:
+pane	runtime	1	:core	0	:-	1	:/work/home/shawnghu	1	python	:/usr/bin/python /opt/ros/kinetic/bin/roscore
+pane	runtime	2	:guardian	1	:*	1	:/work/home/shawnghu/drive/opt/relwithdebinfo	1	bash	:
+pane	runtime	3	:operator	0	:	1	:/work/home/shawnghu/drive/tools/ros_runtime	1	bash	:
+pane	runtime	4	:tf_publisher	0	:	1	:/work/home/shawnghu/drive/tools/calibration/sensor_tf_broadcaster/run	1	bash	:
+pane	runtime	5	:rosbag	0	:	1	:/work/home/shawnghu/rosbags	1	bash	:
+pane	segmentation	1	:vim	1	:*	1	:/work/home/shawnghu/drive/plusmap/test/data/proto	1	bash	:
+pane	segmentation	2	:segment_viz	0	:-	1	:/work/home/shawnghu/drive/build/relwithdebinfo/bin (deleted)	1	bash	:
+pane	segmentation	3	:kitti	0	:	1	:/work/home/shawnghu/Kitti/raw_data/2011_09_26/2011_09_26_drive_0091/2011_09_26/2011_09_26_drive_0091_extract/oxts	1	bash	:
+pane	segmentation	4	:other	0	:	1	:/work/home/shawnghu/pathological_pcds	1	bash	:
+pane	segmentation	5	:segmentviz2	0	:	1	:/work/home/shawnghu/drive/build/relwithdebinfo/bin (deleted)	1	bash	:
+window	27	1	1	:*	5b89,208x61,0,0,58
+window	map	1	0	:	b4a5,204x61,0,0,8
+window	map	2	0	:	b6a6,208x61,0,0,9
+window	map	3	0	:-	5a80,204x61,0,0,11
+window	map	4	0	:	db85,208x61,0,0,64
+window	map	5	1	:*	5a85,204x61,0,0,73
+window	runtime	1	0	:-	5b8a,208x61,0,0,59
+window	runtime	2	1	:*	db81,208x61,0,0,60
+window	runtime	3	0	:	db82,208x61,0,0,61
+window	runtime	4	0	:	db83,208x61,0,0,62
+window	runtime	5	0	:	db84,208x61,0,0,63
+window	segmentation	1	1	:*	b69e,208x61,0,0,1
+window	segmentation	2	0	:-	b69f,208x61,0,0,2
+window	segmentation	3	0	:	b6a1,208x61,0,0,4
+window	segmentation	4	0	:	b6a3,208x61,0,0,6
+window	segmentation	5	0	:	b6a4,208x61,0,0,7
+state	map	runtime

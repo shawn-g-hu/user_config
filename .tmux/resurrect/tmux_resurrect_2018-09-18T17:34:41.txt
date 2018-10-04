@@ -1,0 +1,9 @@
+pane	4	1	:other	1	:*	1	:/work/home/shawnghu/pathological_pcds	1	velodyne_xyzrgb_viewer	:/home/shawnghu/drive/opt/relwithdebinfo/bin/perception/sensor/velodyne_xyzrgb_viewer incorrect_output.pcd
+pane	segmentation	1	:vim	0	:-	1	:/work/home/shawnghu/drive/tools/segmentation/eval	1	vim	:vim -S /home/shawnghu/.vim/sessions/segmentation.vim
+pane	segmentation	2	:segment_viz	1	:*	1	:/work/home/shawnghu/drive/build/relwithdebinfo/bin	1	bash	:
+pane	segmentation	3	:kitti	0	:	1	:/work/home/shawnghu/Kitti/raw_data/2011_09_26	1	bash	:
+window	4	1	1	:*	b6a2,208x61,0,0,5
+window	segmentation	1	0	:-	b49e,204x61,0,0,1
+window	segmentation	2	1	:*	b49f,204x61,0,0,2
+window	segmentation	3	0	:	b4a1,204x61,0,0,4
+state	4	segmentation

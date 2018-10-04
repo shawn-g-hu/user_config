@@ -1,0 +1,7 @@
+pane	segmentation_vim	1	:vim	1	:*	1	:/work/home/shawnghu/drive/tools/segmentation/eval	1	vim	:vim -S /home/shawnghu/.vim/sessions/segmentation.vim
+pane	segmentation_vim	2	:segment_viz	0	:-	1	:/work/home/shawnghu/drive/build/relwithdebinfo/bin	1	bash	:
+pane	segmentation_vim	3	:kitti	0	:	1	:/work/home/shawnghu/Kitti/raw_data/2011_09_26	1	bash	:
+window	segmentation_vim	1	1	:*	b69e,208x61,0,0,1
+window	segmentation_vim	2	0	:-	b49f,204x61,0,0,2
+window	segmentation_vim	3	0	:	b4a1,204x61,0,0,4
+state	segmentation_vim	

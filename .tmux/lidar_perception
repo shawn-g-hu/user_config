@@ -1,21 +1,21 @@
-new -s core
+new -s runtime -n core
 send-keys -t core '. ~/.bashrc ' Enter
 send-keys -t core 'roscore ' Enter
  
-new -s guardian -c ~/drive/opt/relwithdebinfo
+neww -n guardian -c ~/drive/opt/relwithdebinfo
 send-keys -t guardian '. ~/.bashrc ' Enter
-send-keys -t guardian 'sleep 2; ./run/perception/ros_launch.sh ./run/perception/launch_guardian.xml ' Enter
+send-keys -t guardian 'sleep 2; rostime; ./run/perception/ros_launch.sh ./run/perception/launch_guardian.xml ' Enter
 
-new -s operator -c ~/drive/tools/ros_runtime
+neww -n operator -c ~/drive/tools/ros_runtime
 send-keys -t operator 'source install/setup.bash ' Enter
 send-keys -t operator 'source /opt/plusai/setup.bash ' Enter
 send-keys -t operator 'sleep 1; roslaunch ros_guardian_operate.launch ' Enter
 
-new -s tf_publisher -c ~/drive/tools/calibration/sensor_tf_broadcaster/run
+neww -n tf_publisher -c ~/drive/tools/calibration/sensor_tf_broadcaster/run
 send-keys -t tf_publisher '. ~/.bashrc ' Enter
-send-keys -t tf_publisher 'sleep 1;./ros_launch.sh car_config_tf_broadcaster.launch ' Enter
+send-keys -t tf_publisher 'sleep 1; ./ros_launch.sh zeus_config_tf_broadcaster.launch ' Enter
 
-new -s rosbag -c ~/rosbags
+neww -n rosbag -c ~/rosbags
 send-keys -t rosbag '. ~/.bashrc ' Enter
 send-keys -t rosbag 'sleep 5' Enter
-send-keys -t rosbag 'rostime; rosbag play 20180716T112205_unknown_auto_1.bag -r 1 --clock /tf:=/tf_fool ' Enter
+send-keys -t rosbag 'rosparam set use_sim_time true; rosbag play 20180716T112205_unknown_auto_1.bag -r 1 --clock /tf:=/tf_fool ' Enter

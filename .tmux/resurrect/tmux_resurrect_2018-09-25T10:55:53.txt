@@ -1,0 +1,15 @@
+pane	map	1	:vim	1	:*	1	:/work/home/shawnghu/drive/perception/obstacle_detection/src	1	bash	:vim -S /home/shawnghu/.vim/sessions/map.vim
+pane	map	2	:bash	0	:-	1	:/work/home/shawnghu	1	bash	:
+pane	segmentation	1	:vim	1	:*M	1	:/work/home/shawnghu/drive/plusmap/test/data/proto	1	bash	:
+pane	segmentation	2	:segment_viz	0	:-	1	:/work/home/shawnghu/drive/build/relwithdebinfo/bin	1	bash	:
+pane	segmentation	3	:kitti	0	:	1	:/work/home/shawnghu/Kitti/raw_data/2011_09_26/2011_09_26_drive_0091/2011_09_26/2011_09_26_drive_0091_extract/oxts	1	bash	:
+pane	segmentation	4	:other	0	:	1	:/work/home/shawnghu/pathological_pcds	1	bash	:
+pane	segmentation	5	:segmentviz2	0	:	1	:/work/home/shawnghu/drive/build/relwithdebinfo/bin	1	bash	:
+window	map	1	1	:*	b6a5,208x61,0,0,8
+window	map	2	0	:-	b6a6,208x61,0,0,9
+window	segmentation	1	1	:*M	b69e,208x61,0,0,1
+window	segmentation	2	0	:-	b69f,208x61,0,0,2
+window	segmentation	3	0	:	b6a1,208x61,0,0,4
+window	segmentation	4	0	:	b6a3,208x61,0,0,6
+window	segmentation	5	0	:	b6a4,208x61,0,0,7
+state	map	segmentation

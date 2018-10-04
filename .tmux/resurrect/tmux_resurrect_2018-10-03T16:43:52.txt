@@ -1,0 +1,21 @@
+pane	0	1	:bash	1	:*	1	:/work/home/shawnghu/drive	1	bash	:
+pane	gtx3	1	:ssh	1	:*	1	:/work/home/shawnghu/drive/build/debug/bin	1	ssh	:ssh gtx3
+pane	map	1	:vim	1	:*	1	:/work/home/shawnghu/drive	1	vim	:vim perception/obstacle_detection/src/lidar/pointcloud_obstacle_detector.cpp
+pane	map	2	:log	0	:-	1	:/work/home/shawnghu/drive	1	bash	:
+pane	map	3	:bash	0	:	1	:/work/home/shawnghu/drive/build/debug/bin	1	bash	:
+pane	map	4	:bash	0	:	1	:/work/home/shawnghu/drive/build/debug/bin	1	bash	:
+pane	map	5	:make	0	:	1	:/work/home/shawnghu/drive	1	bash	:
+pane	segmentation	1	:vim	1	:*	1	:/work/home/shawnghu/drive/plusmap/test/data/proto	1	bash	:
+pane	segmentation	3	:kitti	0	:	1	:/work/home/shawnghu/Kitti/raw_data/2011_09_26/2011_09_26_drive_0091/2011_09_26/2011_09_26_drive_0091_extract/oxts	1	bash	:
+pane	segmentation	4	:other	0	:-	1	:/work/home/shawnghu/pathological_pcds	1	bash	:
+window	0	1	1	:*	b29d,208x60,0,0,0
+window	gtx3	1	1	:*	5984,208x60,0,0,15
+window	map	1	1	:*	b29f,208x60,0,0,2
+window	map	2	0	:-	b2a0,208x60,0,0,3
+window	map	3	0	:	b2a1,208x60,0,0,4
+window	map	4	0	:	b2a2,208x60,0,0,5
+window	map	5	0	:	b2a3,208x60,0,0,6
+window	segmentation	1	1	:*	5981,208x60,0,0,12
+window	segmentation	3	0	:	5982,208x60,0,0,13
+window	segmentation	4	0	:-	5983,208x60,0,0,14
+state	map	gtx3
