@@ -1,0 +1,12 @@
+pane	0	1	:convert_data	0	:M	1	:/home/shawnghu/plusai_kitti	1	bash	:vim trainval.txt
+pane	0	2	:bash	0	:	1	:/home/shawnghu/tools/ros	1	bash	:vim convert_json_to_kitti.py
+pane	0	3	:bash	0	:	1	:/home/shawnghu/labeled_data/plusai_labeled_data	1	bash	:
+pane	0	4	:modles	1	:*	1	:/home/shawnghu/models	1	bash	:vim plusai_models/hide_symbols.lds
+vim -S /home/shawnghu/.vim/sessions/model_deployment.vim
+pane	0	5	:drive	0	:-	1	:/home/shawnghu/drive	1	bash	:vim stereo/tf_object_detector.cpp
+window	0	1	0	:M	b29d,208x60,0,0,0
+window	0	2	0	:	d29e,204x59,0,0,1
+window	0	3	0	:	d29f,204x59,0,0,2
+window	0	4	1	:*	b2a0,208x60,0,0,3
+window	0	5	0	:-	b2a1,208x60,0,0,4
+state	0	

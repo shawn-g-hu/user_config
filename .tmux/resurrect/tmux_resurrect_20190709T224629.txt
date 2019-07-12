@@ -1,0 +1,5 @@
+pane	0	1	:convert_data	1	:*M	1	:/home/shawnghu/tools/ros	1	vim	:vim convert_json_to_kitti.py
+pane	0	2	:vim	0	:-	1	:/home/shawnghu/plusai_kitti_2	1	vim	:vim train.txt
+window	0	1	1	:*M	b29d,208x60,0,0,0
+window	0	2	0	:-	b29e,208x60,0,0,1
+state	0	

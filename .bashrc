@@ -141,6 +141,7 @@ export HISTSIZE=
 # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
 export HISTFILE=~/.bash_eternal_history
 
+
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
@@ -180,7 +181,11 @@ xterm*|rxvt*)
     ;;
 esac
 
-
+#git branch in prompt, overrides all previous PS1
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+export PS1="${PS1%?} \$(parse_git_branch)\[\033[00m\]$ "
 
 # use vim to read man pages
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
@@ -208,29 +213,41 @@ export CUDA_HOME=/usr/local/cuda
 
 #machine specific
 
+#docker
+if [ -n "$CONTAINER" ]; then
+  PS1_PREFIX="\[\033[01;35m\][docker] \[\033[00m\]"
+else
+  PS1_PREFIX=""
+fi
+unset color_prompt force_color_prompt
+PS1="${PS1_PREFIX}${PS1}"
 
 #export WORKON_HOME=$HOME/.virtualenvs
 #source /usr/local/bin/virtualenvwrapper.sh
 
-alias aws='ssh -X -i ~/.ssh/shawnplusai.pem ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
+alias awsnofwd='ssh -X -i ~/.ssh/shawnplusai.pem ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias awsfwd='ssh -X -i ~/.ssh/shawnplusai.pem -L 16006:127.0.0.1:6006 ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias scrapebag='python ~/scripts/scrape_ros_bags.py'
+
+alias s3mount='s3fs plusai ~/s3 -o uid=${UID},gid=${UID},umask=227,passwd_file=${HOME}/.passwd-s3fs-us -d'
+#https://github.com/s3fs-fuse/s3fs-fuse/issues/333
+#https://github.com/s3fs-fuse/s3fs-fuse/issues/305
+#alias s3szmount='s3fs public-plusai ~/s3 -o url=http://18.222.250.114:8888,uid=${UID},gid=${UID},umask=227,passwd_file=${HOME}/.passwd-s3fs-suzhou,sigv2,use_path_request_style -f -d'
 
 alias rostime='rosparam set use_sim_time true'
 alias tmks='tmux kill-session -t runtime'
 
 export PATH=/usr/local/cuda/bin:$PATH
+source /opt/plusai/setup.bash
 source /opt/ros/kinetic/setup.bash
 
 #drive repo
 export PATH=/usr/local/cuda/bin:$PATH
-source /opt/ros/kinetic/setup.bash
-export EXTERNAL_LIB_DIR=$HOME/external/opt
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/nvidia-390
-export DRIVE_ROOT=/work/home/shawnghu/drive
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/nvidia-410
+#export DRIVE_ROOT=/home/shawnghu/drive
 
-#lidar perception task
+#logs
 alias cddlog='cd ~/drive/opt/debug/log/plusai'
 alias cdrlog='cd ~/drive/opt/relwithdebinfo/log/plusai'
 

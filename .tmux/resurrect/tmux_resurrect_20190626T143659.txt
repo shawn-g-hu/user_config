@@ -1,0 +1,8 @@
+pane	0	1	:bash	0	:-	1	:/home/shawnghu/models	1	make	:vim -S /home/shawnghu/.vim/sessions/model_test.vim
+make all
+pane	0	2	:bash	1	:*	1	:/home/shawnghu/models	1	bash	:
+pane	0	3	:drive	0	:	1	:/home/shawnghu/drive	1	bash	:
+window	0	1	0	:-	b29e,208x60,0,0,1
+window	0	2	1	:*	b29f,208x60,0,0,2
+window	0	3	0	:	b6a0,208x61,0,0,3
+state	0	

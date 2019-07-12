@@ -16,3 +16,9 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[credential]
+	helper = cache --timeout 86400
+[alias]
+        rl = reflog --pretty=reflog
+[pretty]
+        reflog = %C(auto)%h %<|(20)%gd %C(blue)%cr%C(reset) %gs (%s)

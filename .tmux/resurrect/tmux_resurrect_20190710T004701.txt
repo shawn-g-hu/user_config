@@ -1,0 +1,8 @@
+pane	0	1	:convert_data	0	:-M	1	:/home/shawnghu/tools/ros	1	python	:vim trainval.txt
+python convert_json_to_kitti.py --data_path /home/shawnghu/labeled_data/plusai_labeled_data/ --label /home/shawnghu/labeled_data/plusai_labeled_data/replay_simulator_general_trimmed_bags/replay_simulator_general_trimmed_bags.json --out_path /home/shawnghu/plusai_kitti --overwrite_existing_files --clear_index
+pane	0	2	:vim	1	:*	1	:/home/shawnghu/tools/ros	1	vim	:vim convert_json_to_kitti.py
+pane	0	3	:bash	0	:	1	:/home/shawnghu/labeled_data/plusai_labeled_data	1	bash	:
+window	0	1	0	:-M	d29d,204x59,0,0,0
+window	0	2	1	:*	d29e,204x59,0,0,1
+window	0	3	0	:	d29f,204x59,0,0,2
+state	0	

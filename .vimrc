@@ -1,6 +1,5 @@
 set nocompatible
 filetype off                  " required due to some vundle runtimepath thing- refer to line below that turns it back on
-runtime macros/matchit.vim
 "
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -14,8 +13,15 @@ Plugin 'VundleVim/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
 "
+Plugin 'scrooloose/nerdtree'
+nnoremap <C-n> :NERDTreeToggle<CR>
+
+Plugin 'tpope/vim-fugitive'
 
 Plugin 'vim-syntastic/syntastic' "syntax checker
+"c++11
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -56,6 +62,8 @@ Plugin 'itchyny/lightline.vim'
 " All of your Plugins must be added before the following line
 call vundle#end()        
 filetype plugin indent on
+
+runtime macros/matchit.vim
 
 "tmux and other multiplexers have to use escape sequences to send arrow keys,
 "so this undoes the mapping inside vim
@@ -149,6 +157,9 @@ set showcmd
 "syntax highlighting
 syntax on
 
+"save undo history in a file for persistent undo state
+set undofile
+
 "system clipboard reg to + reg
 let g:clipbrdDefaultReg = '+'
 
@@ -178,9 +189,18 @@ cnoremap <M-f> <S-Right>
 "allows for multiple buffers to be open simultaneously
 set hidden
 
+"fix intermittent broken backspace
+"https://chrisjean.com/fix-backspace-in-vim/
+set bs=2
+
 "switch buffers with prompt
 nnoremap gb :ls<CR>:b<Space>
-nnoremap gv :ls<CR>:bd<Space>
+"nnoremap gv :ls<CR>:bd<Space>
+
+" gw : Swap word with next word
+nnoremap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<cr><c-o><c-l>
+" swap with next arg (doesn't work yet)
+"nnoremap <silent> ga :s/\(\%#\w\+\)\(,\s\)\(\w\+\)/\3\2\1/<cr><c-o><c-l>
 
 "close buffer with WQ
 :command WQ :w|bd
@@ -244,7 +264,7 @@ set expandtab
 set number
 set bg=dark
 set smarttab smartindent autoindent
-set shiftwidth=2
+set shiftwidth=4
 set fileformat=unix
 set cursorline
 
