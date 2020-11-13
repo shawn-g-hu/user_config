@@ -22,27 +22,24 @@ pushd()
   fi
 
   builtin pushd "${DIR}" > /dev/null
-  echo -n "DIRSTACK: "
-  dirs
 }
 
 pushd_builtin()
 {
   builtin pushd > /dev/null
-  echo -n "DIRSTACK: "
-  dirs
 }
 
 popd()
 {
   builtin popd > /dev/null
-  echo -n "DIRSTACK: "
-  dirs
 }
 
 alias cd='pushd'
 alias back='popd'
 alias flip='pushd_builtin'
+
+alias cp='cp -i'
+alias mv='mv -i'
 
 # enable color support of ls and grep
 if [ -x /usr/bin/dircolors ]; then
@@ -222,11 +219,9 @@ fi
 unset color_prompt force_color_prompt
 PS1="${PS1_PREFIX}${PS1}"
 
-#export WORKON_HOME=$HOME/.virtualenvs
-#source /usr/local/bin/virtualenvwrapper.sh
+#normally set by drive script but avoided because it fucks up the container for CI
+#export DISPLAY=:0
 
-alias awsnofwd='ssh -X -i ~/.ssh/shawnplusai.pem ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
-alias awsfwd='ssh -X -i ~/.ssh/shawnplusai.pem -L 16006:127.0.0.1:6006 ubuntu@ec2-54-203-162-136.us-west-2.compute.amazonaws.com'
 alias scrapebag='python ~/scripts/scrape_ros_bags.py'
 
 alias s3mount='s3fs plusai ~/s3 -o uid=${UID},gid=${UID},umask=227,passwd_file=${HOME}/.passwd-s3fs-us -d'
@@ -238,14 +233,14 @@ alias rostime='rosparam set use_sim_time true'
 alias tmks='tmux kill-session -t runtime'
 
 export PATH=/usr/local/cuda/bin:$PATH
-source /opt/plusai/setup.bash
-source /opt/ros/kinetic/setup.bash
+export ROS_MASTER_URI=http://localhost:11311
+export GLOG_v=3
 
 #drive repo
-export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/nvidia-410
 #export DRIVE_ROOT=/home/shawnghu/drive
+export DISTCC_HOSTS=localhost/32
 
 #logs
 alias cddlog='cd ~/drive/opt/debug/log/plusai'
@@ -253,3 +248,5 @@ alias cdrlog='cd ~/drive/opt/relwithdebinfo/log/plusai'
 
 #autoformatting
 alias format='clang-format -style=file -i'
+
+alias cleardisplayenv='unset DISPLAY; unset XAUTHORITY; unset XSOCK;'

@@ -2,6 +2,9 @@ set nocompatible
 filetype off                  " required due to some vundle runtimepath thing- refer to line below that turns it back on
 "
 " set the runtime path to include Vundle and initialize
+" git clone https://github.com/VundleVim/Vundle.vim.git
+" ~/.vim/bundle/Vundle.vim
+
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -12,9 +15,48 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
+" For parentheses n shit
+Plugin 'tpope/vim-surround'
+
+"Display indentation
+Plugin 'Yggdroot/indentLine'
+let g:indentLine_char = '|'
+
+"marker; manual control of highlighting groups
+Plugin 'inkarkat/vim-ingo-library' " dependency
+Plugin 'inkarkat/vim-mark'
+
+"don't add marked stuff to the search history
+let g:mwHistAdd = '/@'
+
+"automatically restore marks from previous sessions
+let g:mwAutoLoadMarks = 1
+
+"more colors
+let g:mwDefaultHighlightingPalette = 'extended'
+
+
 "
 Plugin 'scrooloose/nerdtree'
-nnoremap <C-n> :NERDTreeToggle<CR>
+" Display the same nerdtree every time, like an IDE panel
+Plugin 'jistr/vim-nerdtree-tabs'
+
+function! NERDTreeToggleInCurDir()
+  " If NERDTree is open in the current buffer
+  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+    exe ":NERDTreeTabsToggle"
+  else
+    if (expand("%:t") != '')
+      exe ":NERDTreeFind %:p"
+    else
+      exe ":NERDTreeToggle"
+    endif
+  endif
+endfunction
+
+nnoremap <C-n> :call NERDTreeToggleInCurDir()<CR>
+
+
 
 Plugin 'tpope/vim-fugitive'
 
@@ -64,6 +106,9 @@ call vundle#end()
 filetype plugin indent on
 
 runtime macros/matchit.vim
+
+
+let mapleader = ","
 
 "tmux and other multiplexers have to use escape sequences to send arrow keys,
 "so this undoes the mapping inside vim
@@ -180,6 +225,7 @@ cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
+" these two don't even work
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
@@ -194,7 +240,8 @@ set hidden
 set bs=2
 
 "switch buffers with prompt
-nnoremap gb :ls<CR>:b<Space>
+nnoremap gB :ls<CR>:b<Space>
+nnoremap gb :ls<CR>:sb<Space>
 "nnoremap gv :ls<CR>:bd<Space>
 
 " gw : Swap word with next word
@@ -202,15 +249,71 @@ nnoremap <silent> gw :s/\(\%#\w\+\)\(\_W\+\)\(\w\+\)/\3\2\1/<cr><c-o><c-l>
 " swap with next arg (doesn't work yet)
 "nnoremap <silent> ga :s/\(\%#\w\+\)\(,\s\)\(\w\+\)/\3\2\1/<cr><c-o><c-l>
 
-"close buffer with WQ
-:command WQ :w|bd
+" Allow saving of files as sudo when you forget to start vim using sudo
+cmap w!! w !sudo tee > /dev/null %
+"
+" quick system grep, standard parameters for searching in drive repo
+nnoremap gs :silent! grep! -rniI --exclude-dir={build,opt} . -e 
+" current directory of file, hopefully
+nnoremap gS :silent! grep! -rniI --exclude-dir={build,opt} %:p:h -e 
+" word under cursor in cwd
+nnoremap gr :silent! grep! -rniI --exclude-dir={build,opt} . -e <C-R><C-W>
+" word under cursor in current directory of file
+nnoremap gR :silent! grep! -rniI --exclude-dir={build,opt} %:p:h -e <C-R><C-W>
+
+" https://vim.fandom.com/wiki/Search_for_visually_selected_text
+" Search for selected text, forwards or backwards.
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+
+" open quickfix window when updated, for grepping
+augroup quickfix
+    autocmd!
+    autocmd QuickFixCmdPost [^l]* cwindow
+    autocmd QuickFixCmdPost l* lwindow
+augroup END
+" automatically open quickfixes in new split window- doesn't seem to work, vim doesn't seem to receive the mapping.
+" see :help augroup, help autocmd, help quickfix, https://stackoverflow.com/questions/16743112/open-item-from-quickfix-window-in-vertical-split,
+" https://vi.stackexchange.com/questions/7722/how-to-debug-a-mapping
+
+" an important keyword here is "buffer local mappings"; that's what <buffer> is here
+"autocmd! FileType qf nnoremap <buffer> o <C-w><CR>
+"autocmd! FileType qf nnoremap <buffer> o <C-w><CR>
 
 
-"split navigations and then maximize window you tab to
-"nnoremap <C-J> <C-W><C-J><C-W>_
-"nnoremap <C-K> <C-W><C-K><C-W>_
-"nnoremap <C-L> <C-W><C-L><C-W>_
-"nnoremap <C-H> <C-W><C-H><C-W>_
+" in quickfix windows only, remap enter so that it opens windows in splits, instead of voer existing window
+" <buffer> is used to keep the mapping local to buffers of type qf
+
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" https://vim.fandom.com/wiki/Capture_ex_command_output
+" log output, e.g, of :map, to buffer in new tab
+function! TabMessage(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  if empty(message)
+    echoerr "no output"
+  else
+    " use "new" instead of "tabnew" below if you prefer split windows instead of tabs
+    tabnew
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+    silent put=message
+  endif
+endfunction
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 
 "set minimum window height and width to 0 to maximize minimization
 set wmw=0
@@ -219,22 +322,22 @@ set wmh=0
 "resize to equal using Ctrl
 "nnoremap <C-s> <C-w>=
 
-"quick resizing
-nnoremap <S-Up> <C-w>+
-nnoremap <S-Down> <C-w>- 
-nnoremap <S-Left> <C-w>< 
-nnoremap <S-Right> <C-w>> 
+"quick resizing (doesn't work)
+"nnoremap <S-Up> <C-w>+
+"nnoremap <S-Down> <C-w>- 
+"nnoremap <S-Left> <C-w>< 
+"nnoremap <S-Right> <C-w>> 
 
-"allow tabbing in insert mode
-imap <F2> <C-o><C-w>
-imap <F3> <C-o><C-p>
+"allow tabbing in insert mode (doesn't work)
+"imap <F2> <C-o><C-w>
+"imap <F3> <C-o><C-p>
 
-"search in insert
-imap <F4> <C-o>/
+"search in insert (doesn't work)
+"imap <F4> <C-o>/
 
-"delete with f4 and f6 so you don't need to move hands
-inoremap <F5> <Backspace>
-inoremap <F6> <Backspace>
+"delete with f4 and f6 so you don't need to move hands (doesn't work)
+"inoremap <F5> <Backspace>
+"inoremap <F6> <Backspace>
 
 let paste_mode = 0 " 0 = normal, 1 = paste
 
@@ -296,37 +399,59 @@ set ignorecase
 set smartcase
 "don't highlight search results
 set nohlsearch
+"toggle highlighting with ctrl-h
+" removed because it conflicts with window navigation, which was moved from
+" tab so that i could start to use the jumplist properly
+" nnoremap <C-h> :set hlsearch!<CR>
+
+" Highlight all instances of word under cursor, when idle.
+" Useful when studying strange source code.
+" Type z/ to toggle highlighting on/off.
+nnoremap <C-t> :if AutoHighlightToggle()<Bar>set hls<Bar>endif<CR>
+function! AutoHighlightToggle()
+   let @/ = ''
+   if exists('#auto_highlight')
+     au! auto_highlight
+     augroup! auto_highlight
+     setl updatetime=4000
+     echo 'Highlight current word: off'
+     return 0
+  else
+    augroup auto_highlight
+    au!
+    au CursorHold * let @/ = '\V\<'.escape(expand('<cword>'), '\').'\>'
+    augroup end
+    setl updatetime=500
+    echo 'Highlight current word: ON'
+  return 1
+ endif
+endfunction
 
 set history=100
-set undolevels=100
+set undolevels=1000
 "leave a three line buffer when moving to top and bottom of screen, so one can
 "see context
 set scrolloff=3
 
-"let tab switch to next window
-nnoremap <Tab> <C-w>w
+"let switch to next window
+"nnoremap <Tab> <C-w>w
 nnoremap <F2> <C-w>w
 nnoremap <F3> <C-w><C-p>
-"nnoremap <F2> <C-w>p
 
 "ctrl-number to go to tab number
-
-noremap <C-1> 1gt 
-noremap <C-2> 2gt 
-noremap <C-3> 3gt 
-noremap <C-4> 4gt 
-noremap <C-5> 5gt 
-noremap <C-6> 6gt 
-noremap <C-7> 7gt 
-noremap <C-8> 8gt 
-noremap <C-9> 9gt 
-noremap <C-0> 10gt 
+" doesn't work due to lack of support for c-num 
+" https://unix.stackexchange.com/questions/116671/mapping-c-1-does-not-work-in-vim
+"noremap <C-1> 1gt 
 
 "set the up and down keys to behave intuitively on wrapped lines
 nnoremap j gj
 nnoremap k gk
 nnoremap <Up> gk
 nnoremap <Down> gj
+vnoremap j gj
+vnoremap k gk
+vnoremap <Up> gk
+vnoremap <Down> gj
 inoremap <silent> <Up> <Esc>gka
 inoremap <silent> <Down> <Esc>gja
 "arrow keys still move up and down a line
