@@ -110,6 +110,9 @@ runtime macros/matchit.vim
 
 let mapleader = ","
 
+" suppress help menu, since f1 is next to f2
+:nmap <F1> <nop>
+
 "tmux and other multiplexers have to use escape sequences to send arrow keys,
 "so this undoes the mapping inside vim
 "set t_ku= [1;5A
@@ -263,6 +266,7 @@ nnoremap gR :silent! grep! -rniI --exclude-dir={build,opt} %:p:h -e <C-R><C-W>
 
 " https://vim.fandom.com/wiki/Search_for_visually_selected_text
 " Search for selected text, forwards or backwards.
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 vnoremap <silent> * :<C-U>
   \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
@@ -466,3 +470,6 @@ vnoremap ; :
 vnoremap : ;
 
 set visualbell
+
+" make it particularly noticeable what's being highlighted
+hi Visual cterm=bold ctermbg=Blue ctermfg=Yellow

@@ -10,6 +10,7 @@
 
 alias shit='sudo $(fc -ln -1)' #for when you forget to sudo
 alias sudo='sudo ' #used so that sudo evaluates aliases
+alias au='apt update'
 alias agin='apt-get install '
 alias agrm='apt-get remove '
 
@@ -182,10 +183,13 @@ esac
 parse_git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-export PS1="${PS1%?} \$(parse_git_branch)\[\033[00m\]$ "
+export PS1="${PS1%?}\$(parse_git_branch)\[\033[00m\] "
 
 # use vim to read man pages
 export MANPAGER="/bin/sh -c \"col -b | vim -c 'set ft=man ts=8 nomod nolist nonu noma' -\""
+
+# put timestamps in history file
+export HISTTIMEFORMAT="%d/%m/%y %T "
 
 # prompts to install package when command not found
 export COMMAND_NOT_FOUND_INSTALL_PROMPT=1
@@ -231,6 +235,8 @@ alias s3mount='s3fs plusai ~/s3 -o uid=${UID},gid=${UID},umask=227,passwd_file=$
 
 alias rostime='rosparam set use_sim_time true'
 alias tmks='tmux kill-session -t runtime'
+alias wtls='git worktree list'
+alias wtlsp='git worktree list --porcelain'
 
 export PATH=/usr/local/cuda/bin:$PATH
 export ROS_MASTER_URI=http://localhost:11311
@@ -250,3 +256,19 @@ alias cdrlog='cd ~/drive/opt/relwithdebinfo/log/plusai'
 alias format='clang-format -style=file -i'
 
 alias cleardisplayenv='unset DISPLAY; unset XAUTHORITY; unset XSOCK;'
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/shawnghu/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/shawnghu/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/shawnghu/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/shawnghu/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
