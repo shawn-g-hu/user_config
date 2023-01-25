@@ -15,6 +15,11 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
+
+"Python formatting
+Plugin 'psf/black'
+nnoremap <F9> :Black<CR>
+
 " For parentheses n shit
 Plugin 'tpope/vim-surround'
 
@@ -204,6 +209,9 @@ set showcmd
 
 "syntax highlighting
 syntax on
+" don't set default 3000 char limit on syntax highlighting, (else we can break
+" brace-matching and string highlighting can get really weird)
+set synmaxcol=0
 
 "save undo history in a file for persistent undo state
 set undofile

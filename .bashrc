@@ -9,10 +9,34 @@
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 alias shit='sudo $(fc -ln -1)' #for when you forget to sudo
+alias ro='$(`fc -e -`)' # execute last output
+alias co='echo `fc -e -` | xclip -in -selection clipboard' # copy last output    
+alias vo='vim -p `fc -e -`' #vimopen last output-- note that interaction with fg is weird     
 alias sudo='sudo ' #used so that sudo evaluates aliases
 alias au='apt update'
 alias agin='apt-get install '
 alias agrm='apt-get remove '
+
+histrun() {
+    echo "history | grep -vE \"history|histrun\" | grep -oE \"$1.*$\" | tail -n 1"
+    history -s "$(history | grep -vE "history|histrun" | grep -oE "$1.*$" | tail -n 1)"
+}
+
+git-ls() {
+    FILES="$(git ls-tree --name-only HEAD .)"
+    MAXLEN=0
+    IFS="$(printf "\n\b")"
+    for f in $FILES; do
+        if [ ${#f} -gt $MAXLEN ]; then
+            MAXLEN=${#f}
+        fi
+    done
+    for f in $FILES; do
+        str="$(git log -1 --pretty=format:"%C(green)%cr%Creset %x09 %C(cyan)%h%Creset %s %C(yellow)(%cn)%Creset" $f)"
+        printf "%-${MAXLEN}s -- %s\n" "$f" "$str"
+    done
+}
+
 
 pushd()
 {
@@ -94,7 +118,7 @@ fi
 set -o emacs
 
 #avoid ctrl-s causing terminal xoff signal
-stty -ixon
+# stty -ixon
 
 shopt -s histverify
 shopt -s histreedit
@@ -126,8 +150,6 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 
-PROMPT_COMMAND="history -a;$PROMPT_COMMAND" # save history after every command; interleaves history between multiple terminals
-
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 #HISTSIZE=1000
 #HISTFILESIZE=2000
@@ -138,6 +160,186 @@ export HISTSIZE=
 # Change the file location because certain bash sessions truncate .bash_history file upon close.
 # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
 export HISTFILE=~/.bash_eternal_history
+
+# put timestamps in history file
+# export HISTTIMEFORMAT="%d/%m/%y %T "
+
+hcmnt() {
+
+# adds comments to bash history entries (or logs them)
+
+# by Dennis Williamson - 2009-06-05 - updated 2009-06-19
+# http://stackoverflow.com/questions/945288/saving-current-directory-to-bash-history
+# (thanks to Lajos Nagy for the idea)
+
+# the comments can include the directory
+# that was current when the command was issued
+# plus optionally, the date or other information
+
+# set the bash variable PROMPT_COMMAND to the name
+# of this function and include these options:
+
+    # -e - add the output of an extra command contained in the hcmntextra variable
+    # -i - add ip address of terminal that you are logged in *from*
+    #      if you're using screen, the screen number is shown
+    #      if you're directly logged in, the tty number or X display number is shown
+    # -l - log the entry rather than replacing it in the history
+    # -n - don't add the directory
+    # -t - add the from and to directories for cd commands
+    # -y - add the terminal device (tty)
+    # text or a variable
+
+# Example result for PROMPT_COMMAND='hcmnt -et $LOGNAME'
+#     when hcmntextra='date "+%Y%m%d %R"'
+# cd /usr/bin ### mike 20090605 14:34 /home/mike -> /usr/bin
+
+# Example for PROMPT_COMMAND='hcmnt'
+# cd /usr/bin ### /home/mike
+
+# Example for detailed logging:
+#     when hcmntextra='date "+%Y%m%d %R"'
+#     and PROMPT_COMMAND='hcmnt -eityl ~/.hcmnt.log $LOGNAME@$HOSTNAME'
+#     $ tail -1 ~/.hcmnt.log
+#     cd /var/log ### dave@hammerhead /dev/pts/3 192.168.1.1 20090617 16:12 /etc -> /var/log
+
+
+# INSTALLATION: source this file in your .bashrc
+
+    # will not work if HISTTIMEFORMAT is used - use hcmntextra instead
+    export HISTTIMEFORMAT=
+
+    # HISTTIMEFORMAT still works in a subshell, however, since it gets unset automatically:
+
+    #   $ htf="%Y-%m-%d %R "    # save it for re-use
+    #   $ (HISTTIMEFORMAT=$htf; history 20)|grep 11:25
+
+    local script=$FUNCNAME
+
+    local hcmnt=
+    local cwd=
+    local extra=
+    local text=
+    local logfile=
+
+    local options=":eil:nty"
+    local option=
+    OPTIND=1
+    local usage="Usage: $script [-e] [-i] [-l logfile] [-n|-t] [-y] [text]"
+
+    local newline=$'\n' # used in workaround for bash history newline bug
+    local histline=     # used in workaround for bash history newline bug
+
+    local ExtraOpt=
+    local LogOpt=
+    local NoneOpt=
+    local ToOpt=
+    local tty=
+    local ip=
+
+    # *** process options to set flags ***
+
+    while getopts $options option
+    do
+        case $option in
+            e ) ExtraOpt=1;;        # include hcmntextra
+            i ) ip="$(who --ips -m)" # include the terminal's ip address
+                ip=($ip)
+                ip="${ip[4]}"
+                if [[ -z $ip ]]
+                then
+                    ip=$(tty)
+                fi;;
+            l ) LogOpt=1            # log the entry
+                logfile=$OPTARG;;
+            n ) if [[ $ToOpt ]]
+                then
+                    echo "$script: can't include both -n and -t."
+                    echo $usage
+                    return 1
+                else
+                    NoneOpt=1       # don't include path
+                fi;;
+            t ) if [[ $NoneOpt ]]
+                then
+                    echo "$script: can't include both -n and -t."
+                    echo $usage
+                    return 1
+                else
+                    ToOpt=1         # cd shows "from -> to"
+                fi;;
+            y ) tty=$(tty);;
+            : ) echo "$script: missing filename: -$OPTARG."
+                echo $usage
+                return 1;;
+            * ) echo "$script: invalid option: -$OPTARG."
+                echo $usage
+                return 1;;
+        esac
+    done
+
+    text=($@)                       # arguments after the options are saved to add to the comment
+    text="${text[*]:$OPTIND - 1:${#text[*]}}"
+
+    # *** process the history entry ***
+
+    hcmnt=$(history 1)              # grab the most recent command
+
+    # save history line number for workaround for bash history newline bug
+    histline="${hcmnt%  *}"
+
+    hcmnt="${hcmnt# *[0-9]*  }"     # strip off the history line number
+
+    if [[ -z $NoneOpt ]]            # are we adding the directory?
+    then
+        if [[ ${hcmnt%% *} == "cd" ]]    # if it's a cd command, we want the old directory
+        then                             #   so the comment matches other commands "where *were* you when this was done?"
+            if [[ $ToOpt ]]
+            then
+                cwd="$OLDPWD -> $PWD"    # show "from -> to" for cd
+            else
+                cwd=$OLDPWD              # just show "from"
+            fi
+        else
+            cwd=$PWD                     # it's not a cd, so just show where we are
+        fi
+    fi
+
+    if [[ $ExtraOpt && $hcmntextra ]]    # do we want a little something extra?
+    then
+        extra=$(eval "$hcmntextra")
+    fi
+
+    # strip off the old ### comment if there was one so they don't accumulate
+    # then build the string (if text or extra aren't empty, add them plus a space)
+    hcmnt="${hcmnt% ### *} ### ${text:+$text }${tty:+$tty }${ip:+$ip }${extra:+$extra }$cwd"
+
+    if [[ $LogOpt ]]
+    then
+        # save the entry in a logfile
+        echo "$hcmnt" >> $logfile || echo "$script: file error." ; return 1
+    else
+
+        # workaround for bash history newline bug
+        if [[ $hcmnt != ${hcmnt/$newline/} ]] # if there a newline in the command
+        then
+            history -d $histline # then delete the current command so it's not duplicated
+        fi
+
+        # replace the history entry
+        history -s "$hcmnt"
+    fi
+
+} # END FUNCTION hcmnt
+
+# set a default (must use -e option to include it)
+export hcmntextra='date "+%Y%m%d %R"'      # you must be really careful to get the quoting right
+
+# start using it
+# log to this file because i can't figure out how to get this function to stop duplicating things in the pan-up history
+# try "man history" to figure out the exact behavior of -s and -d above and/or whether the terminal history is independent of HISTFILE and see if you can fix it
+export PROMPT_COMMAND='hcmnt -etl ~/.bash_extended_log' 
+PROMPT_COMMAND="history -a; $PROMPT_COMMAND" # save history after every command; interleaves history between multiple terminals
+
 
 
 # set a fancy prompt (non-color, unless we know we "want" color)
@@ -204,7 +406,7 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/e
 export CUDA_HOME=/usr/local/cuda
 
 #turn off the annoying error sound for bash on ubuntu on windows
-#echo set bell-style none >> .inputrc
+bind 'set bell-style none'
 
 #howto: change terminal color scheme
 #wget -O gogh https://git.io/vQgMr && chmod +x gogh && ./gogh && rm gogh
@@ -257,18 +459,16 @@ alias format='clang-format -style=file -i'
 
 alias cleardisplayenv='unset DISPLAY; unset XAUTHORITY; unset XSOCK;'
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/shawnghu/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/shawnghu/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/shawnghu/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/shawnghu/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+# need to surround arg in quotes when calling this function
+function getsnip() {
+    echo "$1"
+    END=$(echo "$1" | grep -oE "end=[0-9]*" | grep -oE "[0-9]*")
+    START=$(echo "$1" | grep -oE "start=[0-9]*" | grep -oE "[0-9]*")
+    BAGNAME=$(echo "$1" | grep -oE "202[0-2][^/&]*.db")
+    
+    echo $END
+    echo $START
+    echo $BAGNAME
+    wget "$1" -O ${BAGNAME%%.*}_${START}to${END}.db
 
+}
